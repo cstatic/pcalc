@@ -1,8 +1,10 @@
 #---------------------------------------------------------------------
 # pcalc 
 #
-# Makefile for Linux. Please let me know if you port pcalc.
+# Makefile for Linux and OS X. Please let me know if you port pcalc.
 #
+
+OS := $(shell uname -s)
 
 VERSION = 4
 
@@ -13,7 +15,13 @@ LEX   = flex
 CFLAGS   ?= -ggdb
 CFLAGS   += -Wall
 CPPFLAGS += -DVERSION='"$(VERSION)"'
-LDLIBS   += -lm -lfl
+LDLIBS   += -lm
+
+ifeq ($(OS),Darwin)
+  LDLIBS += -ll
+else
+  LDLIBS += -lfl
+endif
 
 SRCS = pcalc pcalcl funct math symbol help store print str convert
 OBJS = $(patsubst %,%.o,$(SRCS))
